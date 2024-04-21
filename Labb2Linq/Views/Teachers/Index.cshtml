@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Labb2Linq.Models.Teacher>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherFirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherLastName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeacherFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeacherLastName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TeacherId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TeacherId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TeacherId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
