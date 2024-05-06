@@ -8,9 +8,13 @@ namespace Labb2Linq.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TeacherId { get; set; }
-        [Display(Name ="Förnamn")]
+
+        [Display(Name = "Förnamn")]
         public string TeacherFirstName { get; set; } = string.Empty;
+
         [Display(Name = "Efternamn")]
         public string TeacherLastName { get; set; } = string.Empty;
+
+        public virtual ICollection<Enrollment>? Enrollments { get; set; }
     }
 }

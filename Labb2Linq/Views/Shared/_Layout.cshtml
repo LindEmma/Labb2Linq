@@ -19,11 +19,14 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+                        @*
+                        -------------------------------------------------------------------------------------------------------------------------------------------------------
+                        *******   Kommenterade bort dessa så det blir lättare att se länkarna som hör till uppgiften, men dessa scaffoldade finns alltså också  **************
+                        ------------------------------------------------------------------------------------------------------------------------------------------------------*@
+
+                        @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hem</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Kurser</a>
@@ -37,9 +40,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Teachers" asp-action="Index">Lärare</a>
                         </li>
+                        <br /><br />
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Ansök kurs</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Alla kursansökningar</a>
+                        </li> *@
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Teachers" asp-action="GetTeachersProg1">Alla lärare i programmering 1</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="ListStudentsWithTeachers">Alla elever och deras lärare</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="StudentsWithTeachersProg1">Alla elever som går programmering 1 och deras lärare</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="UpdateTeacherForStudentInCourse">Uppdatera elevs lärare i programmering 1</a>
+                        </li>
+
                     </ul>
                 </div>
             </div>

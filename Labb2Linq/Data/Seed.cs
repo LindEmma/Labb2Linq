@@ -24,7 +24,6 @@ namespace Labb2Linq.Data
                 SeedEnrollments(context);
             }
         }
-
         //method to seed teachers to database
         private static void SeedTeachers(LinqDbContext context)
         {
@@ -40,7 +39,7 @@ namespace Labb2Linq.Data
                 context.SaveChanges();
             }
         }
-        //method to seed school classes to database
+        // seed school classes to database
         private static void SeedSchoolClasses(LinqDbContext context)
         {
             if (!context.SchoolClasses.Any())
@@ -56,13 +55,12 @@ namespace Labb2Linq.Data
                 context.SaveChanges();
             }
         }
-        //method to seed courses to database
+        // Seed courses to database
         private static void SeedCourses(LinqDbContext context)
         {
             if (!context.Courses.Any())
             {
-                var teacher3 = context.Teachers.FirstOrDefault(t => t.TeacherFirstName.Contains("Reidar"));
-                var teacher4 = context.Teachers.FirstOrDefault(t => t.TeacherFirstName.Contains("Aldor"));
+
 
                 context.Courses.AddRange(new List<Course>()
             {
@@ -72,7 +70,7 @@ namespace Labb2Linq.Data
                     CourseDescription = "Grunderna i programmering, i språket C#",
                     StartDate = DateTime.Now.AddDays(2),
                     EndDate = DateTime.Now.AddDays(90),
-                    FkTeacherId = teacher3?.TeacherId
+
                 },
                 new Course()
                 {
@@ -80,13 +78,13 @@ namespace Labb2Linq.Data
                     CourseDescription = "Fortsättning av programmering 1",
                     StartDate = DateTime.Now.AddDays(91),
                     EndDate = DateTime.Now.AddDays(178),
-                    FkTeacherId = teacher4?.TeacherId
+
                 }
             });
                 context.SaveChanges();
             }
         }
-        //method to seed students to database
+        // Seed students to database
         private static void SeedStudents(LinqDbContext context)
         {
             if (!context.Students.Any())
@@ -103,7 +101,7 @@ namespace Labb2Linq.Data
                 context.SaveChanges();
             }
         }
-        //method to seed enrollments to database
+        // Seed enrollments to database
         private static void SeedEnrollments(LinqDbContext context)
         {
             if (!context.Enrollments.Any())
@@ -115,12 +113,15 @@ namespace Labb2Linq.Data
                 var course = context.Courses.FirstOrDefault(c => c.CourseName.Contains("Programmering 1"));
                 var course2 = context.Courses.FirstOrDefault(c => c.CourseName.Contains("Programmering 2"));
 
+                var teacher3 = context.Teachers.FirstOrDefault(t => t.TeacherFirstName.Contains("Reidar"));
+                var teacher4 = context.Teachers.FirstOrDefault(t => t.TeacherFirstName.Contains("Aldor"));
+
                 context.Enrollments.AddRange(new List<Enrollment>()
             {
-                new Enrollment() { FkStudentId = student.StudentId, FkCourseId = course.CourseId },
-                new Enrollment() { FkStudentId = student2.StudentId, FkCourseId = course.CourseId },
-                new Enrollment() { FkStudentId = student3.StudentId, FkCourseId = course2.CourseId },
-                new Enrollment() { FkStudentId = student2.StudentId, FkCourseId = course2.CourseId },
+                new Enrollment() { FkStudentId = student.StudentId, FkCourseId = course.CourseId,  FkTeacherId = teacher3?.TeacherId },
+                new Enrollment() { FkStudentId = student2.StudentId, FkCourseId = course.CourseId, FkTeacherId = teacher3?.TeacherId },
+                new Enrollment() { FkStudentId = student3.StudentId, FkCourseId = course2.CourseId, FkTeacherId = teacher4?.TeacherId },
+                new Enrollment() { FkStudentId = student2.StudentId, FkCourseId = course2.CourseId, FkTeacherId = teacher4?.TeacherId },
                 });
                 context.SaveChanges();
             }

@@ -1,0 +1,27 @@
+﻿@model List<Student>
+
+<h1>Elever med lärare</h1> @* All students with teachers *@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Elev</th>
+            <th>Lärare</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@student.StudentFirstName @student.StudentLastName</td>
+                <td>
+                    <ul>
+                        @foreach (var enrollment in student.Enrollments)
+                        {
+                            <li>@enrollment.Teacher.TeacherFirstName @enrollment.Teacher.TeacherLastName</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

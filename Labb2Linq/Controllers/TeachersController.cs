@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Labb2Linq.Data;
+﻿using Labb2Linq.Data;
 using Labb2Linq.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Labb2Linq.Controllers
 {
@@ -25,6 +20,33 @@ namespace Labb2Linq.Controllers
             return View(await _context.Teachers.ToListAsync());
         }
 
+        public async Task<IActionResult> GetTeachersProg1() // Gets all of the teachers that teach "Programmering 1"
+        {
+            var teachersProg1 = await _context.Teachers
+                .Where(t => t.Enrollments.Any(e => e.Course.CourseName == "Programmering 1"))
+                .SelectMany(t => t.Enrollments.Where(e => e.Course.CourseName == "Programmering 1")
+                    .Select(e => new TeacherCourseViewModel(e.Course.CourseName, t.TeacherFirstName, t.TeacherLastName)))
+                .Distinct() // No duplicates
+                .ToListAsync();
+
+            if (teachersProg1 == null)
+            {
+                return NotFound();
+            }
+
+            return View(teachersProg1);
+        }
+
+        public IActionResult GetTeacherCourses(int teacherId) // Gets all teachers and their courses
+        {
+            var teacherCourses = _context.Enrollments
+                .Where(e => e.FkTeacherId == teacherId)
+                .Include(c => c.Course)
+                .Select(e => new TeacherCourseViewModel(e.Course.CourseName, e.Teacher.TeacherFirstName, e.Teacher.TeacherLastName))
+                .ToList();
+
+            return View(teacherCourses);
+        }
         // GET: Teachers/Details/5
         public async Task<IActionResult> Details(int? id)
         {

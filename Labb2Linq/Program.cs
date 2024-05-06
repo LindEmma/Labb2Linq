@@ -1,6 +1,7 @@
 using Labb2Linq.Data;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
+// Emma Lind, .NET23, Labb2 Linq
 
 namespace Labb2Linq
 {
@@ -20,7 +21,7 @@ namespace Labb2Linq
             var app = builder.Build();
 
             //adds the data from Seed.cs
-            if(args.Length ==1 && args[0].ToLower() == "seeddata")
+            if (args.Length == 1 && args[0].ToLower() == "seeddata")
             {
                 Seed.SeedData(app);
             }

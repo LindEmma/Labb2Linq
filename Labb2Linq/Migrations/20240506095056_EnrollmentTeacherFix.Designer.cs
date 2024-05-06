@@ -4,6 +4,7 @@ using Labb2Linq.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb2Linq.Migrations
 {
     [DbContext(typeof(LinqDbContext))]
-    partial class LinqDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240506095056_EnrollmentTeacherFix")]
+    partial class EnrollmentTeacherFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

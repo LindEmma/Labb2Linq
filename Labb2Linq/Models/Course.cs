@@ -8,7 +8,7 @@ namespace Labb2Linq.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public  int CourseId { get; set; }
+        public int CourseId { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
@@ -16,14 +16,10 @@ namespace Labb2Linq.Models
         [Display(Name = "Kurs")]
         [Required]
         public string CourseName { get; set; } = string.Empty;
-        [Display(Name ="Kursbeskrivning")]
+        [Display(Name = "Kursbeskrivning")]
         public string? CourseDescription { get; set; } = string.Empty;
         [Display(Name = "Betyg")]
         public Grades? CourseGrade { get; set; }
-        [ForeignKey("Teacher")]
-        public int? FkTeacherId { get; set; }
-        [Display(Name ="Lärare")]
-        public Teacher? Teacher { get; set; }
         public virtual ICollection<Enrollment>? Enrollments { get; set; }
 
     }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Labb2Linq.Data;
+using Labb2Linq.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Labb2Linq.Data;
-using Labb2Linq.Models;
 
 namespace Labb2Linq.Controllers
 {
@@ -22,8 +18,75 @@ namespace Labb2Linq.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
-            var linqDbContext = _context.Students.Include(s => s.SchoolClass);
-            return View(await linqDbContext.ToListAsync());
+            var students = await _context.Students
+                .Include(s => s.SchoolClass)
+                .ToListAsync();
+
+            return View(students);
+        }
+        public IActionResult ListStudentsWithTeachers() // Gets all students with all of their teachers
+        {
+            var studentsWithTeachers = _context.Students
+                .Include(s => s.Enrollments)
+                .ThenInclude(c => c.Teacher)
+                .ToList();
+
+            if (studentsWithTeachers == null)
+            {
+                return NotFound();
+            }
+
+            return View(studentsWithTeachers);
+        }
+
+        public IActionResult StudentsWithTeachersProg1() // Gets all students in programming 1, with all of their teachers
+        {
+            var students = _context.Students
+                .Include(s => s.Enrollments) //include enrollments course
+                .ThenInclude(e => e.Course)
+                .Include(s => s.Enrollments)// include enrollments teacher
+                .ThenInclude(e => e.Teacher)
+                .Where(s => s.Enrollments.Any(e => e.Course.CourseName == "Programmering 1"))
+                .ToList();
+
+            if (students == null)
+            {
+                return NotFound();
+            }
+            return View(students);
+        }
+
+        // Updates the teacher for a specific student, in programming 1
+        public async Task<IActionResult> UpdateTeacherForStudentInCourse(int selectedStudentId, int selectedTeacherId)
+        {
+            // gets the enrollment for the selected student in programming 1
+            var enrollmentToUpdate = await _context.Enrollments
+                .Include(e => e.Student)
+                .Include(e => e.Course)
+                .FirstOrDefaultAsync(e => e.FkStudentId == selectedStudentId && e.Course.CourseName == "Programmering 1");
+
+            if (enrollmentToUpdate != null)
+            {
+                var selectedTeacher = await _context.Teachers.FindAsync(selectedTeacherId);
+
+                if (selectedTeacher != null)
+                {
+                    enrollmentToUpdate.Teacher = selectedTeacher;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            var viewModel = new UpdateTeacherViewModel
+            {
+                Students = await _context.Students
+                    .Where(s => s.Enrollments.Any(e => e.Course.CourseName == "Programmering 1"))
+                    .ToListAsync(),
+                Teachers = await _context.Teachers.ToListAsync(),
+                SelectedStudentId = selectedStudentId,
+                SelectedTeacherId = selectedTeacherId
+            };
+
+            return View(viewModel);
         }
 
         // GET: Students/Details/5

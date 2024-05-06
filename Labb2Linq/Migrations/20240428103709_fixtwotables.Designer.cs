@@ -4,6 +4,7 @@ using Labb2Linq.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Labb2Linq.Migrations
 {
     [DbContext(typeof(LinqDbContext))]
-    partial class LinqDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240428103709_fixtwotables")]
+    partial class fixtwotables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,10 +46,15 @@ namespace Labb2Linq.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FkTeacherId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("CourseId");
+
+                    b.HasIndex("FkTeacherId");
 
                     b.ToTable("Courses");
                 });
@@ -71,16 +79,11 @@ namespace Labb2Linq.Migrations
                     b.Property<int>("FkStudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FkTeacherId")
-                        .HasColumnType("int");
-
                     b.HasKey("EnrollmentId");
 
                     b.HasIndex("FkCourseId");
 
                     b.HasIndex("FkStudentId");
-
-                    b.HasIndex("FkTeacherId");
 
                     b.ToTable("Enrollments");
                 });
@@ -158,6 +161,15 @@ namespace Labb2Linq.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("Labb2Linq.Models.Course", b =>
+                {
+                    b.HasOne("Labb2Linq.Models.Teacher", "Teacher")
+                        .WithMany("Courses")
+                        .HasForeignKey("FkTeacherId");
+
+                    b.Navigation("Teacher");
+                });
+
             modelBuilder.Entity("Labb2Linq.Models.Enrollment", b =>
                 {
                     b.HasOne("Labb2Linq.Models.Course", "Course")
@@ -167,20 +179,14 @@ namespace Labb2Linq.Migrations
                         .IsRequired();
 
                     b.HasOne("Labb2Linq.Models.Student", "Student")
-                        .WithMany("Enrollments")
+                        .WithMany()
                         .HasForeignKey("FkStudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Labb2Linq.Models.Teacher", "Teacher")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("FkTeacherId");
-
                     b.Navigation("Course");
 
                     b.Navigation("Student");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Labb2Linq.Models.SchoolClass", b =>
@@ -208,14 +214,9 @@ namespace Labb2Linq.Migrations
                     b.Navigation("Enrollments");
                 });
 
-            modelBuilder.Entity("Labb2Linq.Models.Student", b =>
-                {
-                    b.Navigation("Enrollments");
-                });
-
             modelBuilder.Entity("Labb2Linq.Models.Teacher", b =>
                 {
-                    b.Navigation("Enrollments");
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

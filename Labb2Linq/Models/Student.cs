@@ -19,6 +19,7 @@ namespace Labb2Linq.Models
         [ForeignKey("SchoolClass")]
         public int FkSchoolClassId { get; set; }
         public SchoolClass? SchoolClass { get; set; }
+        public virtual ICollection<Enrollment>? Enrollments { get; set; }
 
     }
 }

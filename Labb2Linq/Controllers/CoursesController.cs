@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Labb2Linq.Data;
+﻿using Labb2Linq.Data;
 using Labb2Linq.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Labb2Linq.Controllers
 {
@@ -22,8 +17,8 @@ namespace Labb2Linq.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var linqDbContext = _context.Courses.Include(c => c.Teacher);
-            return View(await linqDbContext.ToListAsync());
+            var courses = await _context.Courses.ToListAsync();
+            return View(courses);
         }
 
         // GET: Courses/Details/5
@@ -35,7 +30,6 @@ namespace Labb2Linq.Controllers
             }
 
             var course = await _context.Courses
-                .Include(c => c.Teacher)
                 .FirstOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
@@ -48,16 +42,13 @@ namespace Labb2Linq.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
-            ViewData["FkTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherId");
             return View();
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseId,StartDate,EndDate,CourseName,CourseDescription,CourseGrade,FkTeacherId")] Course course)
+        public async Task<IActionResult> Create([Bind("CourseId,StartDate,EndDate,CourseName,CourseDescription,CourseGrade")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +56,6 @@ namespace Labb2Linq.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FkTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherId", course.FkTeacherId);
             return View(course);
         }
 
@@ -82,16 +72,13 @@ namespace Labb2Linq.Controllers
             {
                 return NotFound();
             }
-            ViewData["FkTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherId", course.FkTeacherId);
             return View(course);
         }
 
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseId,StartDate,EndDate,CourseName,CourseDescription,CourseGrade,FkTeacherId")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("CourseId,StartDate,EndDate,CourseName,CourseDescription,CourseGrade")] Course course)
         {
             if (id != course.CourseId)
             {
@@ -118,7 +105,6 @@ namespace Labb2Linq.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FkTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "TeacherId", course.FkTeacherId);
             return View(course);
         }
 
@@ -131,7 +117,6 @@ namespace Labb2Linq.Controllers
             }
 
             var course = await _context.Courses
-                .Include(c => c.Teacher)
                 .FirstOrDefaultAsync(m => m.CourseId == id);
             if (course == null)
             {
@@ -147,11 +132,7 @@ namespace Labb2Linq.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var course = await _context.Courses.FindAsync(id);
-            if (course != null)
-            {
-                _context.Courses.Remove(course);
-            }
-
+            _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

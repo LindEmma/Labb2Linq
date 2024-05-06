@@ -1,0 +1,39 @@
+﻿@model Labb2Linq.Models.UpdateTeacherViewModel
+@{
+    ViewData["Title"] = "UpdateTeacherForStudentInCourse";
+}
+
+<h4>Ändra lärare för elever i kursen "Programmering 1"</h4> @* Updated teacher for a specific student in "programming 1", the teacher is unique to the students enrollment *@
+<hr />
+
+<form asp-controller="Students" asp-action="UpdateTeacherForStudentInCourse" method="post">
+    <div class="form-group">
+        <label for="selectedStudentId">Välj elev:</label>
+        <select class="form-control" id="selectedStudentId" name="selectedStudentId">
+            <option value="">Välj elev...</option>
+            @foreach (var student in Model.Students)
+            {
+                <option value="@student.StudentId">@student.StudentFirstName @student.StudentLastName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="selectedTeacherId">Välj ny lärare:</label>
+        <select class="form-control" id="selectedTeacherId" name="selectedTeacherId">
+            <option value="">Välj lärare...</option>
+            @foreach (var teacher in Model.Teachers)
+            {
+                <option value="@teacher.TeacherId">@teacher.TeacherFirstName @teacher.TeacherLastName</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Spara</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
